@@ -6,8 +6,11 @@ function QRScanner({
   setIsScanning,
   setActivePlace,
   setConqueredPlaces,
+  setShowSavePrompt,
 }) {
   useEffect(() => {
+    if (!activePlace) return
+
     const scanner = new Html5QrcodeScanner(
       'reader',
       {
@@ -19,21 +22,27 @@ function QRScanner({
 
     scanner.render(
       (decodedText) => {
-       const expectedQr = `place_id:${activePlace.id}`
+        const expectedQr = `place_id:${activePlace.id}`
 
-if (decodedText === expectedQr) {
-  setConqueredPlaces((prev) => {
-    if (prev.includes(activePlace.id)) return prev
-    return [...prev, activePlace.id]
-  })
+        if (decodedText === expectedQr) {
+          setConqueredPlaces((prev) => {
+            if (prev.includes(activePlace.id)) return prev
 
-  alert(`✅ Has conquistado ${activePlace.name}`)
+            const updatedConquests = [...prev, activePlace.id]
 
-  setIsScanning(false)
-  setActivePlace(null)
-} else {
-  alert('❌ QR no válido para este local')
-}
+            // Mostrar popup solo en la primera conquista
+            if (prev.length === 0) {
+              setShowSavePrompt(true)
+            }
+
+            return updatedConquests
+          })
+
+          setIsScanning(false)
+          setActivePlace(null)
+        } else {
+          alert('❌ QR no válido para este local')
+        }
       },
       (error) => {
         console.log(error)
@@ -43,7 +52,13 @@ if (decodedText === expectedQr) {
     return () => {
       scanner.clear().catch(() => {})
     }
-  }, [])
+  }, [
+    activePlace,
+    setActivePlace,
+    setConqueredPlaces,
+    setIsScanning,
+    setShowSavePrompt,
+  ])
 
   return (
     <div
@@ -55,20 +70,22 @@ if (decodedText === expectedQr) {
       }}
     >
       <h1>Escanear QR</h1>
-<button
-  onClick={() => setIsScanning(false)}
-  style={{
-    marginBottom: '20px',
-    padding: '10px 16px',
-    borderRadius: '12px',
-    border: 'none',
-    background: 'white',
-    color: '#111',
-    fontWeight: '700',
-  }}
->
-  ← Volver
-</button>
+
+      <button
+        onClick={() => setIsScanning(false)}
+        style={{
+          marginBottom: '20px',
+          padding: '10px 16px',
+          borderRadius: '12px',
+          border: 'none',
+          background: 'white',
+          color: '#111',
+          fontWeight: '700',
+        }}
+      >
+        ← Volver
+      </button>
+
       <div
         id="reader"
         style={{
