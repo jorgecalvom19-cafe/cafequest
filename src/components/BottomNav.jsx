@@ -14,10 +14,10 @@ function BottomNav({ setCurrentTab }) {
         <span>Conquistas</span>
       </button>
 
-      <button>
-        <User size={22} />
-        <span>Perfil</span>
-      </button>
+      <button onClick={() => setCurrentTab('profile')}>
+  <User size={22} />
+  <span>Perfil</span>
+</button>
     </nav>
   )
 }

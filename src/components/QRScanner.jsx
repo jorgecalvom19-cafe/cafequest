@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { Html5QrcodeScanner } from 'html5-qrcode'
 
 function QRScanner({
@@ -8,6 +8,8 @@ function QRScanner({
   setConqueredPlaces,
   setShowSavePrompt,
 }) {
+  const scannedRef = useRef(false)
+
   useEffect(() => {
     if (!activePlace) return
 
@@ -22,31 +24,32 @@ function QRScanner({
 
     scanner.render(
       (decodedText) => {
+        if (scannedRef.current) return
+        scannedRef.current = true
+
         const expectedQr = `place_id:${activePlace.id}`
 
         if (decodedText === expectedQr) {
           setConqueredPlaces((prev) => {
             if (prev.includes(activePlace.id)) return prev
 
-            const updatedConquests = [...prev, activePlace.id]
-
-            // Mostrar popup solo en la primera conquista
             if (prev.length === 0) {
               setShowSavePrompt(true)
             }
 
-            return updatedConquests
+            return [...prev, activePlace.id]
           })
 
-          setIsScanning(false)
-          setActivePlace(null)
+          setTimeout(() => {
+            setIsScanning(false)
+            setActivePlace(null)
+          }, 150)
         } else {
+          scannedRef.current = false
           alert('❌ QR no válido para este local')
         }
       },
-      (error) => {
-        console.log(error)
-      }
+      () => {}
     )
 
     return () => {
@@ -92,7 +95,7 @@ function QRScanner({
           borderRadius: '20px',
           overflow: 'hidden',
         }}
-      ></div>
+      />
     </div>
   )
 }

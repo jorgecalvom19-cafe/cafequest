@@ -6,6 +6,8 @@ import TopCard from './components/TopCard'
 import PlaceDetail from './components/PlaceDetail'
 import QRScanner from './components/QRScanner'
 import Conquests from './components/Conquests'
+import SaveProgressPrompt from './components/SaveProgressPrompt'
+import Profile from './components/Profile'
 
 import './App.css'
 
@@ -14,6 +16,7 @@ function App() {
   const [activePlace, setActivePlace] = useState(null)
   const [isScanning, setIsScanning] = useState(false)
   const [currentTab, setCurrentTab] = useState('map')
+  const [showSavePrompt, setShowSavePrompt] = useState(false)
 
   const [conqueredPlaces, setConqueredPlaces] = useState(() => {
     const saved = localStorage.getItem('conqueredPlaces')
@@ -27,20 +30,17 @@ function App() {
     )
   }, [conqueredPlaces])
 
-  if (isScanning) {
-    return (
-      <QRScanner
-        activePlace={activePlace}
-        setIsScanning={setIsScanning}
-        setActivePlace={setActivePlace}
-        setConqueredPlaces={setConqueredPlaces}
-      />
-    )
-  }
-
   return (
     <div className="app">
-      {activePlace ? (
+      {isScanning ? (
+        <QRScanner
+          activePlace={activePlace}
+          setIsScanning={setIsScanning}
+          setActivePlace={setActivePlace}
+          setConqueredPlaces={setConqueredPlaces}
+          setShowSavePrompt={setShowSavePrompt}
+        />
+      ) : activePlace ? (
         <PlaceDetail
           place={activePlace}
           onBack={() => setActivePlace(null)}
@@ -64,9 +64,21 @@ function App() {
           {currentTab === 'conquests' && (
             <Conquests conqueredPlaces={conqueredPlaces} />
           )}
+          {currentTab === 'profile' && (
+  <Profile
+  conqueredPlaces={conqueredPlaces}
+  setShowSavePrompt={setShowSavePrompt}
+/>
+)}
 
           <BottomNav setCurrentTab={setCurrentTab} />
         </>
+      )}
+
+      {showSavePrompt && (
+        <SaveProgressPrompt
+          onClose={() => setShowSavePrompt(false)}
+        />
       )}
     </div>
   )

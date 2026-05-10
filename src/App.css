@@ -279,3 +279,60 @@ body,
   font-weight: 800;
   font-size: 15px;
 }
+
+
+.save-prompt-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 20px;
+}
+
+.save-prompt {
+  width: 100%;
+  max-width: 420px;
+  background: #151515;
+  color: white;
+  border-radius: 28px;
+  padding: 26px 22px 22px;
+  text-align: center;
+  box-shadow: 0 20px 70px rgba(0, 0, 0, 0.45);
+}
+
+.save-prompt h2 {
+  margin: 0 0 12px;
+  font-size: 24px;
+  line-height: 1.1;
+}
+
+.save-prompt p {
+  margin: 0 0 22px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.google-btn {
+  width: 100%;
+  border: 0;
+  border-radius: 18px;
+  padding: 15px;
+  background: white;
+  color: #111;
+  font-weight: 800;
+  font-size: 15px;
+}
+
+.later-btn {
+  margin-top: 12px;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.65);
+  font-weight: 700;
+  padding: 12px;
+}
