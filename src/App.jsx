@@ -62,14 +62,16 @@ function App() {
           )}
 
           {currentTab === 'conquests' && (
-            <Conquests conqueredPlaces={conqueredPlaces} />
-          )}
-          {currentTab === 'profile' && (
-  <Profile
-  conqueredPlaces={conqueredPlaces}
-  setShowSavePrompt={setShowSavePrompt}
-/>
+  <Conquests
+    conqueredPlaces={conqueredPlaces}
+    setCurrentTab={setCurrentTab}
+    setSelectedPlace={setSelectedPlace}
+  />
 )}
+
+          {currentTab === 'profile' && (
+            <Profile conqueredPlaces={conqueredPlaces} />
+          )}
 
           <BottomNav setCurrentTab={setCurrentTab} />
         </>
